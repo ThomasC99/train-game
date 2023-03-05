@@ -59,7 +59,7 @@ public class Main {
     static ArrayList <Car> toBuy = new ArrayList <> ();
     public static void main (String [] args) throws Exception {
         // graph = World.world();
-        master = NorthAmerica.world();
+        master = World.world();
 	// JGraphXAdapter <String, DefaultWeightedEdge> graphAdapter = new JGraphXAdapter <> (master);
 	// mxIGraphLayout layout = new mxCircleLayout (graphAdapter);
 	// layout.execute(graphAdapter.getDefaultParent());
@@ -68,7 +68,7 @@ public class Main {
 	// ImageIO.write(image, "PMG", img);
 
         graph = new Pseudograph <> (DefaultWeightedEdge.class);
-        location = "Utica";
+        location = "Ottawa";
 
         Set <DefaultWeightedEdge> edges = master.edgesOf(location);
         Iterator <DefaultWeightedEdge> iter = edges.iterator();
@@ -89,8 +89,8 @@ public class Main {
         }
 
         path = new DijkstraShortestPath <String, DefaultWeightedEdge> (graph);
-        l = new LightRailLoco();
-        l.addCar(new GenericLightRail());
+        l = new RegionalLoco();
+        l.addCar(new GenericRegional());
         mainMenu();
     }
     static void mainMenu () {
