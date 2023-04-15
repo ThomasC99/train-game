@@ -1,13 +1,13 @@
 package job;
+
 import java.util.ArrayList;
 import java.util.Random;
-
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.graph.DefaultWeightedEdge;
-
 import main.Main;
+import java.io.Serializable;
 
-public class Job {
+public class Job implements Serializable {
     private String origin;
     private String destination;
     private double value;

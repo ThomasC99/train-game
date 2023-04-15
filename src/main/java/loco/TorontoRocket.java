@@ -10,7 +10,17 @@ public class TorontoRocket extends Loco {
 }
 
 /*
+10 km
+11 km
+12 km
+18 km
+22 km
 27 km	354 km/h
+35 km
+37 km
+45 km
+46 km
+66 km
 
 3 MW	52 km/h
 

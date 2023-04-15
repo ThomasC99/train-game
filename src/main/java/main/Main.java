@@ -6,37 +6,26 @@ import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
-import java.io.*;
-
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.Pseudograph;
-
-
-
 import car.*;
-
-
-
 import graph.*;
-
-
-
 import job.Job;
-
-
-
 import loco.*;
-
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import org.jgrapht.ext.JGraphXAdapter;
-
 import com.mxgraph.layout.mxCircleLayout;
 import com.mxgraph.layout.mxIGraphLayout;
 import com.mxgraph.util.mxCellRenderer;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
+import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
 
 /*
 Conventional : < 130 km/h
@@ -57,47 +46,53 @@ public class Main {
     public static DijkstraShortestPath <String, DefaultWeightedEdge> path;
     static ArrayList <Car> toBuy = new ArrayList <> ();
     public static void main (String [] args) throws Exception {
-        // graph = World.world();
-        master = Via.via();
-	// JGraphXAdapter <String, DefaultWeightedEdge> graphAdapter = new JGraphXAdapter <> (master);
-	// mxIGraphLayout layout = new mxCircleLayout (graphAdapter);
-	// layout.execute(graphAdapter.getDefaultParent());
-	// BufferedImage image = mxCellRenderer.createBufferedImage(graphAdapter, null, 2, Color.WHITE, true, null);
-	// File img = new File ("../../../../graph.png");
-	// ImageIO.write(image, "PMG", img);
+		System.out.println("1. New game");
+		System.out.println("2. Load game");
+		int choice;
+		do {
+			choice = input.nextInt();
+		} while (choice != 1 && choice != 2);
+		System.out.println("\n\n\n");
+		if (choice == 1) {
+			master = Via.via();
+			graph = new Pseudograph <> (DefaultWeightedEdge.class);
+			location = "Ottawa";
 
-        graph = new Pseudograph <> (DefaultWeightedEdge.class);
-        location = "Ottawa";
+			Set <DefaultWeightedEdge> edges = master.edgesOf(location);
+			Iterator <DefaultWeightedEdge> iter = edges.iterator();
+			DefaultWeightedEdge edge = iter.next();
+			graphUtils.addEdge(graph, master.getEdgeSource(edge), master.getEdgeTarget(edge), master.getEdgeWeight(edge));
 
-        Set <DefaultWeightedEdge> edges = master.edgesOf(location);
-        Iterator <DefaultWeightedEdge> iter = edges.iterator();
-        DefaultWeightedEdge edge = iter.next();
-        graphUtils.addEdge(graph, master.getEdgeSource(edge), master.getEdgeTarget(edge), master.getEdgeWeight(edge));
-
-        master.removeEdge(edge);
-        Iterator <String> iter2 = master.vertexSet().iterator();
-        ArrayList <String> remove = new ArrayList <> ();
-        while (iter2.hasNext()) {
-            String vertex = iter2.next();
-            if (master.edgesOf(vertex).size() == 0) {
-                remove.add(vertex);
-            }
-        }
-        for (int i = 0; i < remove.size(); i++) {
-            master.removeVertex(remove.get(i));
-        }
-
-        path = new DijkstraShortestPath <String, DefaultWeightedEdge> (graph);
-        l = new TorontoRocket();
+			master.removeEdge(edge);
+			Iterator <String> iter2 = master.vertexSet().iterator();
+			ArrayList <String> remove = new ArrayList <> ();
+			while (iter2.hasNext()) {
+				String vertex = iter2.next();
+				if (master.edgesOf(vertex).size() == 0) {
+					remove.add(vertex);
+				}
+			}
+			for (int i = 0; i < remove.size(); i++) {
+				master.removeVertex(remove.get(i));
+			}
+			l = new TorontoRocket();
+		} else if (choice == 2) {
+			FileInputStream fileInputStream = new FileInputStream("./save.sav");
+			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+			master = (Pseudograph <String, DefaultWeightedEdge>) objectInputStream.readObject();
+			graph = (Pseudograph <String, DefaultWeightedEdge>) objectInputStream.readObject();
+			l = (Loco) objectInputStream.readObject();
+			location = (String) objectInputStream.readObject();
+			money = (Double) objectInputStream.readObject();
+			objectInputStream.close();
+			
+		}
+		path = new DijkstraShortestPath <String, DefaultWeightedEdge> (graph);
         mainMenu();
     }
-    static void mainMenu () {
+    static void mainMenu () throws IOException {
         while (true) {
-            System.out.println("1. Load passengers");
-            System.out.println("2. Depart");
-            System.out.println("3. Store");
-            System.out.println("4. Manifest");
-            System.out.println("5. Quit");
+            Menu.printMainMenu();
             int choice = 0;
             do {
                 try {
@@ -117,7 +112,17 @@ public class Main {
                 manifest();
                 System.out.println("\n\n");
                 mainMenu();
-            } else if (choice == 5) {
+			} else if (choice == 5) {
+				FileOutputStream fileOutputStream = new FileOutputStream ("./save.sav");
+				ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
+				outputStream.writeObject(master);
+				outputStream.writeObject(graph);
+				outputStream.writeObject(l);
+				outputStream.writeObject(location);
+				outputStream.writeObject(money);
+				outputStream.flush();
+				outputStream.close();
+            } else if (choice == 6) {
                 break;
             }
         }
@@ -187,15 +192,8 @@ public class Main {
         money += earned;
     }
     static void manifest () {
-        int capacity = 0;
-        int capacityUsed = 0;
         double totalWeight = l.getWeight();
         HashMap <String, Integer> map = jobSummary();
-        for (int i = 0; i < l.getCars().size(); i++) {
-            Car car = l.getCars().get(i);
-            capacity += car.getCapacity();
-            capacityUsed += car.getJobs().size();
-        }
         System.out.println("Money         : " + money);
         System.out.println("Locomotive    : " + l.getName());
         if (l.getPower() < 1000) {
@@ -210,8 +208,8 @@ public class Main {
         } else {
             System.out.println(String.format("Total weight : %.1f t", totalWeight / 1000));
         }
-        System.out.println("Capacity      : " + capacity);
-        System.out.println("Capacity used : " + capacityUsed);
+        System.out.println("Capacity      : " + l.getCapacity());
+        System.out.println("Capacity used : " + l.getCapacityUsed());
         System.out.println();
         Iterator <String> iter = map.keySet().iterator();
         while (iter.hasNext()) {
@@ -219,7 +217,7 @@ public class Main {
             System.out.println(const1 + " : " + map.get(const1));
         }
     }
-    static void store () {
+    static void store () throws IOException {
         while (true) {
             ArrayList <DefaultWeightedEdge> edges = new ArrayList <> ();
             Iterator <String> v = graph.vertexSet().iterator();

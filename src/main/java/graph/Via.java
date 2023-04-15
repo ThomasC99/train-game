@@ -329,7 +329,7 @@ public class Via {
 		graphUtils.addEdge(graph, "Port Edward", "Prince Rupert", 14.0);
 		
 		// Montreal - Washington
-		graphUtils.addEdge(graph, "Montreal", "Cantic", 71.0);
+		graphUtils.addEdge(graph, "Montréal", "Cantic", 71.0);
 		graphUtils.addEdge(graph, "Cantic", "St Albans", 40.0);
 		graphUtils.addEdge(graph, "St Albans", "Essex Junction", 39.0);
 		graphUtils.addEdge(graph, "Essex Junction", "Waterbury", 35.0);
@@ -370,8 +370,8 @@ public class Via {
 		graphUtils.addEdge(graph, "Los Angeles", "San Diego", 340.0);
 		
 		// Montreal - New York
-		graphUtils.addEdge(graph, "Montreal", "Montreal West", 8.0);
-		graphUtils.addEdge(graph, "Montreal West", "Lacolle", 50.0);
+		graphUtils.addEdge(graph, "Montréal", "Montréal West", 8.0);
+		graphUtils.addEdge(graph, "Montréal West", "Lacolle", 50.0);
 		graphUtils.addEdge(graph, "Lacolle", "Rouses Point", 10.0);
 		graphUtils.addEdge(graph, "Rouses Point", "Plattsburgh", 38.0);
 		graphUtils.addEdge(graph, "Plattsburgh", "Fort Ticonderoga", 110.0);
@@ -560,7 +560,7 @@ public class Via {
 		graphUtils.addEdge(graph, "Perthuis", "Rivière-à-Pierre", 10.0);
 		
 		// Montreal - Chicoutimi
-		graphUtils.addEdge(graph, "Montreal", "Mont Royal", 6.0);
+		graphUtils.addEdge(graph, "Montréal", "Mont Royal", 6.0);
 		graphUtils.addEdge(graph, "Mont Royal", "Ahuntsic", 6.0);
 		graphUtils.addEdge(graph, "Ahuntsic", "Pointe-aux-Trembles", 19.0);
 		graphUtils.addEdge(graph, "Pointe-aux-Trembles", "St-Paul-L'Ermite", 9.0);

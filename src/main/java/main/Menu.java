@@ -29,4 +29,12 @@ public class Menu {
         }
         System.out.println(list.get(list.size() - 1));
     }
+	static void printMainMenu () {
+		System.out.println("1. Load passengers");
+        System.out.println("2. Depart");
+        System.out.println("3. Store");
+        System.out.println("4. Manifest");
+		System.out.println("5. Save");
+        System.out.println("6. Quit");
+	}
 }

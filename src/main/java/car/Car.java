@@ -1,10 +1,10 @@
 package car;
 
 import java.util.ArrayList;
-
+import java.io.Serializable;
 import job.Job;
 
-public class Car {
+public class Car implements Serializable {
     private double weight;
     private int capacity;
     private String name;

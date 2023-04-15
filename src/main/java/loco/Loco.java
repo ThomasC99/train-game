@@ -1,10 +1,11 @@
 package loco;
 
 import java.util.ArrayList;
-
 import car.Car;
+import java.io.Serializable;
+import java.util.Iterator;
 
-public class Loco {
+public class Loco implements Serializable {
     private double maxSpeed = -1;
     private double power;
     private double weight;
@@ -94,4 +95,21 @@ public class Loco {
     public double getCost () {
         return cost;
     }
+	public int getCapacity () {
+		Iterator <Car> iter = getCars().iterator();
+		int capacity = 0;
+		while (iter.hasNext()) {
+			capacity += iter.next().getCapacity();
+		}
+		return capacity;
+	}
+	
+	public int getCapacityUsed () {
+		int capacityUsed = 0;
+		Iterator <Car> iter = getCars().iterator();
+		while (iter.hasNext()) {
+			capacityUsed += iter.next().getCapacityUsed();
+		}
+		return capacityUsed;
+	}
 }
