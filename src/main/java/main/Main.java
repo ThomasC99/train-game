@@ -39,13 +39,12 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 
 /*
-Conventional : < 130 km/h                   2.2 MW
-Higher Speed : 130 km/h - 200 km/h          3.4 MW
-High Speed : 200 km/h - 310 km/h            5.2 MW
-Very High Speed : 310 km/h - 500 km/h       8.4 MW
+Conventional : < 130 km/h
+Higher Speed : 130 km/h - 200 km/h
+High Speed : 200 km/h - 310 km/h
+Very High Speed : 310 km/h - 500 km/h
 Ultra High Speed : > 500 km/h
-Record : 578 km/h                           9.7 MW
-1,440 km/h                                  24 MW
+Record : 578 km/h
  */
 
 public class Main {
@@ -59,7 +58,7 @@ public class Main {
     static ArrayList <Car> toBuy = new ArrayList <> ();
     public static void main (String [] args) throws Exception {
         // graph = World.world();
-        master = World.world();
+        master = Via.via();
 	// JGraphXAdapter <String, DefaultWeightedEdge> graphAdapter = new JGraphXAdapter <> (master);
 	// mxIGraphLayout layout = new mxCircleLayout (graphAdapter);
 	// layout.execute(graphAdapter.getDefaultParent());
@@ -89,8 +88,7 @@ public class Main {
         }
 
         path = new DijkstraShortestPath <String, DefaultWeightedEdge> (graph);
-        l = new RegionalLoco();
-        l.addCar(new GenericRegional());
+        l = new TorontoRocket();
         mainMenu();
     }
     static void mainMenu () {
