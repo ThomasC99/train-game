@@ -75,7 +75,7 @@ public class Main {
 			for (int i = 0; i < remove.size(); i++) {
 				master.removeVertex(remove.get(i));
 			}
-			l = new TorontoRocket();
+			l = new TurboTrain();
 		} else if (choice == 2) {
 			FileInputStream fileInputStream = new FileInputStream("./save.sav");
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -99,7 +99,7 @@ public class Main {
                     choice = input.nextInt();
                 } catch (InputMismatchException e) {
                 }
-            } while (choice < 1 || choice > 5);
+            } while (choice < 1 || choice > 6);
             System.out.println("\n\n");
             if (choice == 1) {
                 loadPassengers();
