@@ -79,12 +79,8 @@ public class Main {
 			for (int i = 0; i < remove.size(); i++) {
 				master.removeVertex(remove.get(i));
 			}
-			l = new Loco();
-			l.setWeight(119000.0);
-			l.setPower(2240000);
-			l.setMaxSpeed(49.167);
-			l.setTracktiveEffort(l.getWeight());
-			l.addCar(new Car(732000, 1632, "", 0));
+			l = new EMD_F59PH();
+			l.addCar(new BombardierBiLevel());
 		} else if (choice == 2) {
 			FileInputStream fileInputStream = new FileInputStream("./save.sav");
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -238,6 +234,9 @@ public class Main {
 	
     static void store () throws IOException {
         while (true) {
+			if (toBuy.isEmpty()) {
+				toBuy.add(new BombardierBiLevel());
+			}
             ArrayList <DefaultWeightedEdge> edges = new ArrayList <> ();
             Iterator <String> v = graph.vertexSet().iterator();
             while (v.hasNext()) {
@@ -249,7 +248,6 @@ public class Main {
                     }
                 }
             }
-
             System.out.println("Money : " + money);
             System.out.println();
             System.out.println("1. Upgrade loco power");
