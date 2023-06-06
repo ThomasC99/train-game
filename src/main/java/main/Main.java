@@ -33,10 +33,13 @@ Higher Speed : 130 km/h - 200 km/h
 High Speed : 200 km/h - 310 km/h
 Very High Speed : 310 km/h - 500 km/h
 Ultra High Speed : > 500 km/h
-Record : 578 km/h
+Record : 575 km/h
+Maglev : 603 km/h
+Hyperloop : 1,100 km/h (theoretical)
  */
 
 public class Main {
+	
     static Loco l;
     static Scanner input = new Scanner (System.in);
     static String location;
@@ -45,6 +48,7 @@ public class Main {
     public static Pseudograph <String, DefaultWeightedEdge> graph;
     public static DijkstraShortestPath <String, DefaultWeightedEdge> path;
     static ArrayList <Car> toBuy = new ArrayList <> ();
+	
     public static void main (String [] args) throws Exception {
 		System.out.println("1. New game");
 		System.out.println("2. Load game");
@@ -75,7 +79,12 @@ public class Main {
 			for (int i = 0; i < remove.size(); i++) {
 				master.removeVertex(remove.get(i));
 			}
-			l = new TurboTrain();
+			l = new Loco();
+			l.setWeight(119000.0);
+			l.setPower(2240000);
+			l.setMaxSpeed(49.167);
+			l.setTracktiveEffort(l.getWeight());
+			l.addCar(new Car(732000, 1632, "", 0));
 		} else if (choice == 2) {
 			FileInputStream fileInputStream = new FileInputStream("./save.sav");
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -90,6 +99,7 @@ public class Main {
 		path = new DijkstraShortestPath <String, DefaultWeightedEdge> (graph);
         mainMenu();
     }
+	
     static void mainMenu () throws IOException {
         while (true) {
             Menu.printMainMenu();
@@ -111,7 +121,6 @@ public class Main {
             } else if (choice == 4) {
                 manifest();
                 System.out.println("\n\n");
-                mainMenu();
 			} else if (choice == 5) {
 				FileOutputStream fileOutputStream = new FileOutputStream ("./save.sav");
 				ObjectOutputStream outputStream = new ObjectOutputStream(fileOutputStream);
@@ -127,6 +136,7 @@ public class Main {
             }
         }
     }
+	
     static void departures () {
         System.out.println("1. Stop in " + location);
         ArrayList <DefaultWeightedEdge> options = new ArrayList <> (graph.edgesOf(location));
@@ -161,6 +171,7 @@ public class Main {
             departures();
         }
     }
+	
     static void loadPassengers () {
         for (int i = 0; i < l.getCars().size(); i++) {
             boolean result = true;
@@ -173,6 +184,7 @@ public class Main {
             } while (result);
         }
     }
+	
     static void completeJobs () {
         double earned = 0;
         int departed = 0;
@@ -191,25 +203,31 @@ public class Main {
         System.out.println("\n\n");
         money += earned;
     }
+	
     static void manifest () {
         double totalWeight = l.getWeight();
         HashMap <String, Integer> map = jobSummary();
-        System.out.println("Money         : " + money);
-        System.out.println("Locomotive    : " + l.getName());
+        System.out.println("Money            : " + money);
+        System.out.println("Locomotive       : " + l.getName());
         if (l.getPower() < 1000) {
-            System.out.println("Power         : " + l.getPower() + " W");
+            System.out.println("Power            : " + l.getPower() + " W");
         } else if (1000 <= l.getPower() && l.getPower() < 1000000) {
-            System.out.println("Power         : " + (int)(l.getPower() / 1000) + " kW");
+            System.out.println("Power            : " + (int)(l.getPower() / 1000) + " kW");
         } else {
-            System.out.println("Power         : " + (int)(l.getPower() / 1000000) + " MW");
+            System.out.println("Power            : " + (int)(l.getPower() / 1000000) + " MW");
         }
         if (totalWeight < 1000) {
-            System.out.println("Total weight    : " + totalWeight + " kg");
+            System.out.println("Total weight        : " + totalWeight + " kg");
         } else {
-            System.out.println(String.format("Total weight : %.1f t", totalWeight / 1000));
+            System.out.println(String.format("Total weight     : %.1f t", totalWeight / 1000));
         }
-        System.out.println("Capacity      : " + l.getCapacity());
-        System.out.println("Capacity used : " + l.getCapacityUsed());
+		if (l.getTracktiveEffort() < 1000) {
+			System.out.println("Tracktive Effort : " + l.getTracktiveEffort() + " N");
+		} else if (l.getTracktiveEffort() < 1000 * 1000) {
+			System.out.println("Tracktive Effort : " + l.getTracktiveEffort() / 1000 + " kN");
+		}
+        System.out.println("Capacity         : " + l.getCapacity());
+        System.out.println("Capacity used    : " + l.getCapacityUsed());
         System.out.println();
         Iterator <String> iter = map.keySet().iterator();
         while (iter.hasNext()) {
@@ -217,6 +235,7 @@ public class Main {
             System.out.println(const1 + " : " + map.get(const1));
         }
     }
+	
     static void store () throws IOException {
         while (true) {
             ArrayList <DefaultWeightedEdge> edges = new ArrayList <> ();
@@ -249,8 +268,17 @@ public class Main {
             System.out.println("   Current       : " + (int)(l.getMaxSpeed() * 3.6));
             System.out.println("   Cost          : " + (int)l.getMaxSpeed());
             System.out.println("   After Upgrade : " + (int)((l.getMaxSpeed() + 1) * 3.6));
+			System.out.println("3. Upgrade tracktive effort");
+			if (l.getTracktiveEffort() < 1000) {
+				System.out.println("   Current       : " + (int)l.getTracktiveEffort() + " N");
+				System.out.println("   After Upgrade : " + (int)(l.getTracktiveEffort() * 1.01) + " N");
+			} else if (l.getTracktiveEffort() < 1000 * 1000) {
+				System.out.println("   Current       : " + (int)(l.getTracktiveEffort() / 1000) + " kN");
+				System.out.println("   After Upgrade : " + (int)(l.getTracktiveEffort() * 1.01 / 1000) + " kN");
+			}
+			System.out.println("   Cost          : " + (l.getTracktiveEffort() / 1000));
             for (int i = 0; i < toBuy.size(); i++) {
-                System.out.println((i + 3) + ". Buy new " + toBuy.get(i).getName());
+                System.out.println((i + 4) + ". Buy new " + toBuy.get(i).getName());
                 System.out.println("   Cost     : " + toBuy.get(i).cost);
                 if (toBuy.get(i).getWeight() < 1000) {
                     System.out.println("   Weight   : " + toBuy.get(i).getWeight() + " kg");
@@ -260,12 +288,12 @@ public class Main {
                 System.out.println("   Capacity : " + toBuy.get(i).getCapacity());
             }
             for (int i = 0; i < edges.size(); i++) {
-                System.out.println((i + 3 + toBuy.size()) + ". Buy route : " + master.getEdgeSource(edges.get(i)) + " - " +
+                System.out.println((i + 4 + toBuy.size()) + ". Buy route : " + master.getEdgeSource(edges.get(i)) + " - " +
                     master.getEdgeTarget(edges.get(i)));
                 System.out.println("   Cost   : " + master.getEdgeWeight(edges.get(i)) * 100);
                 System.out.println("   Length : " + master.getEdgeWeight(edges.get(i)) + " km");
             }
-            System.out.println((toBuy.size() + edges.size() + 3) + ". Back");
+            System.out.println((toBuy.size() + edges.size() + 4) + ". Back");
             int choice;
             do {
                 choice = input.nextInt();
@@ -281,17 +309,22 @@ public class Main {
                     money -= l.getMaxSpeed();
                     l.setMaxSpeed(l.getMaxSpeed() + 1);
                 }
-            } else if (choice == toBuy.size() + edges.size() + 3) {
+			} else if (choice == 3) {
+				if (money >= l.getTracktiveEffort() / 1000) {
+					money -= l.getTracktiveEffort() / 1000;
+					l.setTracktiveEffort(l.getTracktiveEffort() * 1.01);
+				}
+            } else if (choice == toBuy.size() + edges.size() + 4) {
                 break;
-            } else if (choice <= toBuy.size() + 2 && choice >= 3) {
+            } else if (choice <= toBuy.size() + 4 && choice >= 6) {
                 choice -= 3;
                 if (toBuy.get(choice).cost <= money) {
                     money -= toBuy.get(choice).cost;
                     l.addCar(toBuy.get(choice));
                     toBuy.remove(choice);
                 }
-            } else if (choice > toBuy.size() + 2 && choice < toBuy.size() + edges.size() + 3) {
-                choice = choice - toBuy.size() - 3;
+            } else if (choice > toBuy.size() + 4 && choice < toBuy.size() + edges.size() + 5) {
+                choice = choice - toBuy.size() - 4;
                 DefaultWeightedEdge edge = edges.get(choice);
                 if (money >= master.getEdgeWeight(edge) * 100) {
                     money -= master.getEdgeWeight(edge) * 100;
@@ -319,8 +352,8 @@ public class Main {
                 }
             }
         }
-        mainMenu();
     }
+	
     static HashMap <String, Integer> jobSummary () {
         HashMap <String, Integer> map = new HashMap<>();
         for (int i = 0; i < l.getCars().size(); i++) {

@@ -4,8 +4,34 @@ import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.Pseudograph;
 
 public class Via {
+	
+	private static Pseudograph <String, DefaultWeightedEdge> graph = new Pseudograph <> (DefaultWeightedEdge.class);
+	
+	public static void lynnLake () {
+		// The Pas - Lynn Lake
+		graphUtils.addEdge(graph, "The Pas", "Prospector", 16.0);
+		graphUtils.addEdge(graph, "Prospector", "Root Lake", 13.0);
+		graphUtils.addEdge(graph, "Root Lake", "Wanless", 13.0);
+		graphUtils.addEdge(graph, "Wanless", "Atik", 13.0);
+		graphUtils.addEdge(graph, "Atik", "Simonhouse", 8.0);
+		graphUtils.addEdge(graph, "Simonhouse", "Cranberry Portage", 16.0);
+		graphUtils.addEdge(graph, "Cranberry Portage", "Optic Lake", 26.0);
+		graphUtils.addEdge(graph, "Optic Lake", "Heming Lake", 12.0);
+		graphUtils.addEdge(graph, "Heming Lake", "Sherridon", 30.0);
+		graphUtils.addEdge(graph, "Sherridon", "Ruddock", 21.0);
+		graphUtils.addEdge(graph, "Ruddock", "Charles", 35.0);
+		graphUtils.addEdge(graph, "Charles", "Pawistik", 30.0);
+		graphUtils.addEdge(graph, "Pawistik", "Mile 151.8", 1.0);
+		graphUtils.addEdge(graph, "Mile 151.8", "Pukatawagan", 8.0);
+		graphUtils.addEdge(graph, "Pukatawagan", "Jetait", 36.0);
+		graphUtils.addEdge(graph, "Jetait", "Herriot", 38.0);
+		graphUtils.addEdge(graph, "Herriot", "Drybrough", 19.0);
+		graphUtils.addEdge(graph, "Drybrough", "McVeigh", 22.0);
+		graphUtils.addEdge(graph, "McVeigh", "Lynn Lake", 22.0);
+	}
+	
     public static Pseudograph <String, DefaultWeightedEdge> via () {
-        Pseudograph <String, DefaultWeightedEdge> graph = new Pseudograph <> (DefaultWeightedEdge.class);
+		lynnLake();
 
         // TODO Halifax - Sydney - Montreal : 340 km
         graphUtils.addEdge(graph, "Halifax", "Armdale", 6.0);
@@ -275,7 +301,7 @@ public class Via {
 		graphUtils.addEdge(graph, "Fort Langley", "New Westminster", 27.0);
 		graphUtils.addEdge(graph, "New Westminster", "Vancouver", 19.0);
 
-		// Red Pass Junction - Prince Rupert TODO
+		// Red Pass Junction - Prince Rupert
 		graphUtils.addEdge(graph, "Red Pass Junction", "Tête-Jaune", 40.0);
 		graphUtils.addEdge(graph, "Tête-Jaune", "Croydon", 20.0);
 		graphUtils.addEdge(graph, "Croydon", "Dunster", 10.0);
@@ -997,27 +1023,6 @@ public class Via {
 		graphUtils.addEdge(graph, "Somme", "Weekes", 7.0);
 		graphUtils.addEdge(graph, "Weekes", "Dillabough", 8.0);
 		graphUtils.addEdge(graph, "Dillabough", "Reserve", 13.0);
-		
-		// The Pas - Lynn Lake
-		graphUtils.addEdge(graph, "The Pas", "Prospector", 16.0);
-		graphUtils.addEdge(graph, "Prospector", "Root Lake", 13.0);
-		graphUtils.addEdge(graph, "Root Lake", "Wanless", 13.0);
-		graphUtils.addEdge(graph, "Wanless", "Atik", 13.0);
-		graphUtils.addEdge(graph, "Atik", "Simonhouse", 8.0);
-		graphUtils.addEdge(graph, "Simonhouse", "Cranberry Portage", 16.0);
-		graphUtils.addEdge(graph, "Cranberry Portage", "Optic Lake", 26.0);
-		graphUtils.addEdge(graph, "Optic Lake", "Heming Lake", 12.0);
-		graphUtils.addEdge(graph, "Heming Lake", "Sherridon", 30.0);
-		graphUtils.addEdge(graph, "Sherridon", "Ruddock", 21.0);
-		graphUtils.addEdge(graph, "Ruddock", "Charles", 35.0);
-		graphUtils.addEdge(graph, "Charles", "Pawistik", 30.0);
-		graphUtils.addEdge(graph, "Pawistik", "Mile 151.8", 1.0);
-		graphUtils.addEdge(graph, "Mile 151.8", "Pukatawagan", 8.0);
-		graphUtils.addEdge(graph, "Pukatawagan", "Jetait", 36.0);
-		graphUtils.addEdge(graph, "Jetait", "Herriot", 38.0);
-		graphUtils.addEdge(graph, "Herriot", "Drybrough", 19.0);
-		graphUtils.addEdge(graph, "Drybrough", "McVeigh", 22.0);
-		graphUtils.addEdge(graph, "McVeigh", "Lynn Lake", 22.0);
 		
 		// Dauphin - Winipegosis
 		graphUtils.addEdge(graph, "Dauphin", "Valley River", 14.0);
