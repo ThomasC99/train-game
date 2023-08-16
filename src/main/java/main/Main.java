@@ -312,16 +312,14 @@ public class Main {
 					money -= l.getTracktiveEffort() / 1000;
 					l.setTracktiveEffort(l.getTracktiveEffort() * 1.01);
 				}
-            } else if (choice == toBuy.size() + edges.size() + 4) {
-                break;
-            } else if (choice <= toBuy.size() + 4 && choice >= 6) {
-                choice -= 3;
+            } else if (choice <= toBuy.size() + 4 && choice >= 4) {
+                choice -= 4;
                 if (toBuy.get(choice).cost <= money) {
                     money -= toBuy.get(choice).cost;
                     l.addCar(toBuy.get(choice));
                     toBuy.remove(choice);
                 }
-            } else if (choice > toBuy.size() + 4 && choice < toBuy.size() + edges.size() + 5) {
+            } else if (choice > toBuy.size() + 4 && choice < toBuy.size() + edges.size() + 4) {
                 choice = choice - toBuy.size() - 4;
                 DefaultWeightedEdge edge = edges.get(choice);
                 if (money >= master.getEdgeWeight(edge) * 100) {
@@ -348,6 +346,8 @@ public class Main {
 
                     path = new DijkstraShortestPath <String, DefaultWeightedEdge> (graph);
                 }
+            } else {
+                break;
             }
         }
     }
