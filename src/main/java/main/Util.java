@@ -19,7 +19,7 @@ public class Util {
             } else {
                 l.accelerate();
             }
-            System.out.println(String.format("%.1f km/h, %.1f km", (l.getCurrentSpeed() * 3.6), (distance - traveled)));
+            System.out.print(String.format("\r%.1f km/h, %.1f km         ", (l.getCurrentSpeed() * 3.6), (distance - traveled)));
             traveled += l.getCurrentSpeed() / 1000;
 			time += 1;
         }

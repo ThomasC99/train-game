@@ -12,15 +12,7 @@ import car.*;
 import graph.*;
 import job.Job;
 import loco.*;
-import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.ext.JGraphXAdapter;
-import com.mxgraph.layout.mxCircleLayout;
-import com.mxgraph.layout.mxIGraphLayout;
-import com.mxgraph.util.mxCellRenderer;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
@@ -58,9 +50,9 @@ public class Main {
 		} while (choice != 1 && choice != 2);
 		System.out.println("\n\n\n");
 		if (choice == 1) {
-			master = Via.via();
+			master = NorthAmerica.network();
 			graph = new Pseudograph <> (DefaultWeightedEdge.class);
-			location = "Ottawa";
+			location = "River Denys";
 
 			Set <DefaultWeightedEdge> edges = master.edgesOf(location);
 			Iterator <DefaultWeightedEdge> iter = edges.iterator();
@@ -79,8 +71,10 @@ public class Main {
 			for (int i = 0; i < remove.size(); i++) {
 				master.removeVertex(remove.get(i));
 			}
-			l = new EMD_F59PH();
-			l.addCar(new BombardierBiLevel());
+			// l = new EMD_F59PH();
+			// l.addCar(new BombardierBiLevel());
+            l = new HighSpeedLoco();
+            l.addCar(new GenericHighSpeed());
 		} else if (choice == 2) {
 			FileInputStream fileInputStream = new FileInputStream("./save.sav");
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
@@ -235,7 +229,7 @@ public class Main {
     static void store () throws IOException {
         while (true) {
 			if (toBuy.isEmpty()) {
-				toBuy.add(new BombardierBiLevel());
+				// toBuy.add(new SiemensVenture());
 			}
             ArrayList <DefaultWeightedEdge> edges = new ArrayList <> ();
             Iterator <String> v = graph.vertexSet().iterator();
@@ -312,14 +306,14 @@ public class Main {
 					money -= l.getTracktiveEffort() / 1000;
 					l.setTracktiveEffort(l.getTracktiveEffort() * 1.01);
 				}
-            } else if (choice <= toBuy.size() + 4 && choice >= 4) {
+            } else if (choice <= toBuy.size() + 3 && choice >= 4) {
                 choice -= 4;
                 if (toBuy.get(choice).cost <= money) {
                     money -= toBuy.get(choice).cost;
                     l.addCar(toBuy.get(choice));
                     toBuy.remove(choice);
                 }
-            } else if (choice > toBuy.size() + 4 && choice < toBuy.size() + edges.size() + 4) {
+            } else if (choice >= toBuy.size() + 4 && choice < toBuy.size() + edges.size() + 4) {
                 choice = choice - toBuy.size() - 4;
                 DefaultWeightedEdge edge = edges.get(choice);
                 if (money >= master.getEdgeWeight(edge) * 100) {
